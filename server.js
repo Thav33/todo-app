@@ -1,11 +1,11 @@
 const express = require('express')
 const app = express()
-const PORT = 1000
+const PORT = 3000
 
 const MongoClient = require('mongodb').MongoClient
 
 //load content of the .env file. it aloows us use "process.env.DB_STRING"
-require('dotenv').config() 
+require('dotenv').config()
 const connString = process.env.DB_STRING
 
 MongoClient.connect(connString)
@@ -13,7 +13,7 @@ MongoClient.connect(connString)
     console.log(`CONNECTED TO MONGO DB`)
     const db = client.db('todo')
     const todocollection = db.collection('todolist')
-    
+
 // })
 
 app.set('view engine', 'ejs')
@@ -29,7 +29,7 @@ app.get('/', (req, res) => {
 
     const todoItem = todocollection.find().toArray()
     .then((data) => {
-        console.log(data)
+        //console.log(data)
         res.render('index.ejs', {todoItem: data})
     })
     .catch((err) => {
@@ -40,7 +40,7 @@ app.get('/', (req, res) => {
 
 
 app.post('/todoapp', (req, res) => {
-    console.log(req.body)
+    //console.log(req.body)
 
     todocollection.insertOne({
         todolist: req.body.todo
@@ -56,6 +56,9 @@ app.post('/todoapp', (req, res) => {
 })
 
 app.delete('/deleteItem', (req, res) => {
+
+    console.log(req.body);
+
     todocollection.deleteOne({
         todolist: req.body.todoTextFromJS
     })
